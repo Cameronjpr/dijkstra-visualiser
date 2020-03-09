@@ -26,6 +26,14 @@ class Graph {
     console.table(this.matrix)
   }
 
+  moveNode(i, x, y) {
+    this.nodes[i].x = x;
+    this.nodes[i].y = y;
+
+    console.log(this.nodes[i])
+    // then need to go through a recalculate edge weights
+  }
+
   removeNode(i) {
     this.nodes.slice(i, 1)
   }

@@ -1,5 +1,5 @@
 function setup() {
-  createCanvas(900, 700)
+  createCanvas(800, 600)
 }
 
 const graph = new Graph();
@@ -93,7 +93,12 @@ function mouseDragged() {
   if (!user.dragging) {
     user.dragging = true;
     user.target = getNearest(mouseX, mouseY) ?? null;
+
   }
+  // while (keyCode === SHIFT) {
+  //   console.log(user.target)
+  //   graph.moveNode(user.target, mouseX, mouseY)
+  // }
 }
 
 function mouseReleased() {
