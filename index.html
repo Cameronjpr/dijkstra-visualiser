@@ -4,7 +4,24 @@
     <script src="dijkstra.js"></script>
     <script src="graph.js"></script>
     <script src="main.js"></script>
+    <style>
+      *.unselectable {
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
   </head>
   <body>
+    <section class="unselectable">
+      <h1>Dijkstra's shortest path visualiser</h1>
+      <ul>
+        <li>Click to place nodes</li>
+        <li>Drag between nodes to add edges</li>
+        <li>Double click to set start node</li>
+        <li>Double click again to set end node</li>
+        <li>Press Enter to find the shortest path</li>
+      </ul>
+    </section>
   </body>
 </html>

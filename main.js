@@ -12,14 +12,21 @@ const user = {
 }
 
 function draw() {
-  background(100)
+  background(150)
   noStroke()
+  fill(255)
+  text(`Start node: ${graph.start ?? 'not set'}`, 20, 20)
+  text(`End node: ${graph.end ?? 'not set'}`, 20, 40)
+  if (graph.path)
+    text(`Shortest route: ${graph.start + ' -> ' + graph.path.join(' -> ')}`, 20, 60)
+  
   graph.nodes.forEach((p, i) => {
-    if (p.s) fill(255, 50, 50)
-    if (p.e) fill(50, 50, 255)
-    if (p.over) fill(0)
+    if (i === graph.start) fill(255, 50, 50)
+    else if (i === graph.end) fill(50, 50, 255)
+    else if (p.over) fill(0)
     else fill(255)
     ellipse(p.x, p.y, 8)
+    text(i, p.x + 6, p.y + 6)
   })
 
   stroke(255)
@@ -111,14 +118,17 @@ function keyPressed() {
 
 function drawPath(path) {
   stroke(255, 0, 0)
-  for (let i = 0; i < path.length - 1; i++) {
+  for (let i = 0; i < path.length; i++) {
     
+
     let a = graph.nodes[path[i]]
-    let b = graph.nodes[path[i + 1]]
+
+    if (i < path.length - 1) {
+      let b = graph.nodes[path[i + 1]]
+      line(a.x, a.y, b.x, b.y)
+    }
     
     if (i === 0) 
       line(graph.nodes[graph.start].x, graph.nodes[graph.start].y, a.x, a.y)
-  
-    line(a.x, a.y, b.x, b.y)
   }
 }
