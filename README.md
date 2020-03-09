@@ -1,6 +1,6 @@
 # dijkstra-visualiser
 
-A visualiser for Dijkstra's shortest path algorithm. 
+A visualiser for Dijkstra's shortest path algorithm. (Link)[https://cameronjpr.github.io/dijkstra-visualiser/]
 
 * Click to place new nodes
 * Drag between nodes to add edges. 
