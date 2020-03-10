@@ -1,5 +1,4 @@
 function shortestPath(edges, numVertices, startVertex) {
-  console.log(edges, numVertices, startVertex)
   let done = new Array(numVertices)
   done[startVertex] = true
   let pathLengths = new Array(numVertices)
@@ -14,7 +13,6 @@ function shortestPath(edges, numVertices, startVertex) {
   
   pathLengths[startVertex] = 0
   for (var i = 0; i < numVertices - 1; i++) {
-    console.log(i)
     var closest = -1
     var closestDistance = Infinity
 
@@ -26,7 +24,8 @@ function shortestPath(edges, numVertices, startVertex) {
     }
     done[closest] = true
     for (var j = 0; j < numVertices; j++) {
-      console.log(done[j])
+      if (edges[closest] === undefined)
+        continue;  
       if (!done[j]) {
         var possiblyCloserDistance = pathLengths[closest] + edges[closest][j]
         if (possiblyCloserDistance < pathLengths[j]) {
@@ -45,6 +44,7 @@ function shortestPath(edges, numVertices, startVertex) {
 
 function constructPath(shortestPathInfo, endVertex) {
   var path = []
+  if (shortestPathInfo.predecessors[endVertex] === undefined) return false // way of determining if no path exists
   while (endVertex != shortestPathInfo.startVertex) {
     path.unshift(endVertex)
     endVertex = shortestPathInfo.predecessors[endVertex]

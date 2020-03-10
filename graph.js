@@ -30,8 +30,15 @@ class Graph {
     this.nodes[i].x = x;
     this.nodes[i].y = y;
 
-    console.log(this.nodes[i])
-    // then need to go through a recalculate edge weights
+    console.log('moving: ' + this.nodes[i].x, this.nodes[i].y)
+
+    for (let j = 0; j < this.nodes.length; j++) {
+      if (this.matrix[i][j] !== Infinity && i !== j) {
+        const weight = dist(this.nodes[i].x, this.nodes[i].y, this.nodes[j].x, this.nodes[j].y)
+        this.matrix[i][j] = weight;
+        this.matrix[j][i] = weight
+      }
+    }
   }
 
   removeNode(i) {

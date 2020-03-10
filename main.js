@@ -1,9 +1,15 @@
 function setup() {
   createCanvas(800, 600)
+  textSize(16)
 }
 
 const graph = new Graph();
-const userPrecision = 15;
+const nodeSize = 15;
+const edgeWeight = 3;
+
+let green = '#6EEB83';
+let red = '#FF5964';
+let pathColor = '#DACC3E'
 
 const user = {
   dragging: false,
@@ -11,25 +17,15 @@ const user = {
   hovering: null
 }
 
+// const infoStartNode = select('#info-start-node')
+// const infoEndNode = select('#info-end-node')
+// const infoShortestPath = select('#info-shortest-path')
+
 function draw() {
-  background(150)
+  background('#254441')
   noStroke()
   fill(255)
-  text(`Start node: ${graph.start ?? 'not set'}`, 20, 20)
-  text(`End node: ${graph.end ?? 'not set'}`, 20, 40)
-  if (graph.path)
-    text(`Shortest route: ${graph.start + ' -> ' + graph.path.join(' -> ')}`, 20, 60)
-  
-  graph.nodes.forEach((p, i) => {
-    if (i === graph.start) fill(255, 50, 50)
-    else if (i === graph.end) fill(50, 50, 255)
-    else if (p.over) fill(0)
-    else fill(255)
-    ellipse(p.x, p.y, 8)
-    text(i, p.x + 6, p.y + 6)
-  })
-
-  stroke(255)
+  stroke(175)
   graph.matrix.forEach((row, i) => {
     row.forEach((weight, j) => {
       if (weight !== Infinity && i !== j) {
@@ -39,18 +35,36 @@ function draw() {
       }
     })
   })
-  
-  if (user.target !== null && user.dragging) {
-    line(graph.nodes[user.target].x, graph.nodes[user.target].y, mouseX, mouseY)
-  }
 
-  if (graph.path) {
+  strokeWeight(edgeWeight)
+  if (user.target !== null && user.dragging && keyCode !== SHIFT)
+    line(graph.nodes[user.target].x, graph.nodes[user.target].y, mouseX, mouseY)
+    
+  if (graph.start !== null && graph.end !== null)
+    graph.findPath(graph.start, graph.end)
+  
+  if (graph.path)
     drawPath(graph.path)
-  }
+
+  displayPathInformation()
+  
+  graph.nodes.forEach((p, i) => {
+    noStroke()
+    if (i === graph.start) fill(green)
+    else if (i === graph.end) fill(red)
+    else if (p.over) fill(blue)
+    else fill(255)
+    ellipse(p.x, p.y, nodeSize)
+    textAlign(LEFT, CENTER)
+    strokeWeight(4)
+    stroke(50)
+    text(i, p.x + nodeSize - 3, p.y + 1)
+  })
+  strokeWeight(edgeWeight)
 }
 
-// Determines if mouse press is near (~10px) a node
-const isPromixous = (p, mx, my) => dist(p.x, p.y, mx, my) < userPrecision;
+// Determines if mouse press is near a node
+const isPromixous = (p, mx, my) => dist(p.x, p.y, mx, my) < nodeSize * 2;
 
 // Returns the index of the clicked node, if there is one
 function getNearest(mx, my) {
@@ -85,20 +99,16 @@ function doubleClicked() {
 
     console.log('start ' + graph.start, ', end ' + graph.end)
   }
-
   user.target = null;
 }
 
 function mouseDragged() {
   if (!user.dragging) {
-    user.dragging = true;
-    user.target = getNearest(mouseX, mouseY) ?? null;
-
-  }
-  // while (keyCode === SHIFT) {
-  //   console.log(user.target)
-  //   graph.moveNode(user.target, mouseX, mouseY)
-  // }
+    user.dragging = true
+    user.target = getNearest(mouseX, mouseY) ?? null
+  } 
+  else if (keyCode === SHIFT && user.target !== null)
+    graph.moveNode(user.target, mouseX, mouseY)
 }
 
 function mouseReleased() {
@@ -108,24 +118,21 @@ function mouseReleased() {
     graph.addEdge(user.target, destination)
   }
 
+  if (graph.start !== null && graph.end !== null)
+    graph.findPath(graph.start, graph.end)
+  
   user.dragging = false;
   user.target = null;
 }
 
 function keyPressed() {
-  if (keyCode === ENTER)
-    if (graph.start !== null && graph.end !== null)
-      console.log(graph.findPath(graph.start, graph.end))
-
   if (keyCode === ESCAPE)
     graph.reset();
 }
 
 function drawPath(path) {
-  stroke(255, 0, 0)
+  stroke(pathColor)
   for (let i = 0; i < path.length; i++) {
-    
-
     let a = graph.nodes[path[i]]
 
     if (i < path.length - 1) {
@@ -136,4 +143,15 @@ function drawPath(path) {
     if (i === 0) 
       line(graph.nodes[graph.start].x, graph.nodes[graph.start].y, a.x, a.y)
   }
+}
+
+function displayPathInformation() {
+  // if (graph.path  !== null) {
+  //   infoStartNode.innerText = `Start node: ${graph.start ?? 'not set'}`
+  //   infoEndNode.innerText = `End node: ${graph.end ?? 'not set'}`
+    
+  //   infoShortestPath.innerText = graph.path ? 
+  //   `Shortest route: ${graph.start + ' -> ' + graph.path.join(' -> ')}` :
+  //   `No path found.`
+  // }
 }

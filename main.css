@@ -1,0 +1,35 @@
+body {
+  font-family: 'Roboto Mono', monospace;
+
+  overflow: hidden;
+  display: flex;
+  height: 100%;
+}
+
+#infopane {
+  order: 1;
+  margin: 1em;
+}
+
+#controlpane {
+  margin: 1em;
+}
+
+*.unselectable {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+}
+
+h1 {
+ font-size: 32;
+ margin-top: 0;
+}
+
+h2 {
+  font-size: 24;
+}
+
+h3 {
+ font-size: 20;
+}

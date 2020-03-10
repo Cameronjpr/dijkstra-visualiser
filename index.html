@@ -1,27 +1,58 @@
-<html>
+<!-- <html>
   <head>
-    <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
-    <script src="dijkstra.js"></script>
-    <script src="graph.js"></script>
-    <script src="main.js"></script>
-    <style>
-      *.unselectable {
-        -moz-user-select: none;
-        -khtml-user-select: none;
-        -webkit-user-select: none;
-      }
-    </style>
+    
   </head>
   <body>
-    <section class="unselectable">
+    <section id="infopane" class="unselectable">
+      <form id="controlpane">
+        <input type="radio" name="dragMode" for="moveMode" value="moveMode"></input>  
+        <label for="moveMode">Move Mode</label>
+        <input type="radio" name="dragMode" for="edgeMode" value="moveMode"></input>
+        <label for="edgeMode">Edge Mode</label>
+      </form>
       <h1>Dijkstra's shortest path visualiser</h1>
+      <span id="info-start-node">Start node: </span><br>
+      <span id="info-end-node">End node: </span><br>
+      <span id="info-shortest-path">Shortest path: </span><br>
+      <h2>About</h2>
+      <p>
+        This is an interactive tool built to visualise
+        Dijstrak's pathfinding algorithm. Use it to create
+        graphs by adding nodes and edges. 
+      </p>
+      <h2>Instructions</h2>
       <ul>
         <li>Click to place nodes</li>
         <li>Drag between nodes to add edges</li>
         <li>Double click to set start node</li>
         <li>Double click again to set end node</li>
-        <li>Press Enter to find the shortest path</li>
       </ul>
     </section>
   </body>
+</html>
+
+<!doctype html>
+<html lang="en"> -->
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
+  <script src="dijkstra.js"></script>
+  <script src="graph.js"></script>
+  <script src="main.js"></script>
+  <title>React.js Boilerplate</title>
+</head>
+<body>
+  <noscript>If you're seeing this message, that means
+    <strong>JavaScript has been disabled on your browser</strong>, please
+    <strong>enable JS</strong> to make this app work.</noscript>
+    <div id="app"></div>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+  <link rel="icon" href="/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+</body>
+
 </html>
