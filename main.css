@@ -1,9 +1,18 @@
-body {
-  font-family: 'Roboto Mono', monospace;
+* {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+}
 
+body {
+  font-family: 'Open Sans', monospace;
   overflow: hidden;
   display: flex;
   height: 100%;
+}
+
+canvas {
+  border: 5px solid black;
 }
 
 #infopane {
@@ -12,13 +21,11 @@ body {
 }
 
 #controlpane {
-  margin: 1em;
+  margin: 0;
 }
 
-*.unselectable {
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
+fieldset {
+  background: lightgray;
 }
 
 h1 {
@@ -32,4 +39,17 @@ h2 {
 
 h3 {
  font-size: 20;
+}
+
+table {
+  padding: 5px;
+  border: 1px solid black;
+}
+
+th, td {
+  min-width: 10em;
+}
+
+th {
+  text-align: left;
 }

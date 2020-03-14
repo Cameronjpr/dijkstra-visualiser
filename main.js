@@ -1,29 +1,29 @@
+let infoStartNode, infoEndNode, infoShortestPath;
+const CW = 800;
+const CH = 600;
+
 function setup() {
-  createCanvas(800, 600)
+  createCanvas(CW, CH)
   textSize(16)
+
+  infoStartNode = select('#info-start-node')
+  infoEndNode = select('#info-end-node')
+  infoShortestPath = select('#info-shortest-path')
 }
 
 const graph = new Graph();
 const nodeSize = 15;
-const edgeWeight = 3;
+const edgeWeight = 4;
+
+const user = new User();
 
 let green = '#6EEB83';
 let red = '#FF5964';
 let pathColor = '#DACC3E'
-
-const user = {
-  dragging: false,
-  target: null,
-  hovering: null
-}
-
-// const infoStartNode = select('#info-start-node')
-// const infoEndNode = select('#info-end-node')
-// const infoShortestPath = select('#info-shortest-path')
+let textOutline = '#254441'
 
 function draw() {
   background('#254441')
-  noStroke()
   fill(255)
   stroke(175)
   graph.matrix.forEach((row, i) => {
@@ -37,8 +37,13 @@ function draw() {
   })
 
   strokeWeight(edgeWeight)
-  if (user.target !== null && user.dragging && keyCode !== SHIFT)
-    line(graph.nodes[user.target].x, graph.nodes[user.target].y, mouseX, mouseY)
+
+  if (user.dragging) {
+    if (user.dragMode === 'moveMode' && user.target !== null)
+      graph.moveNode(user.target, mouseX, mouseY)
+    else if (user.dragMode === 'edgeMode' && user.target !== null)
+      line(graph.nodes[user.target].x, graph.nodes[user.target].y, mouseX, mouseY)
+  }
     
   if (graph.start !== null && graph.end !== null)
     graph.findPath(graph.start, graph.end)
@@ -57,7 +62,7 @@ function draw() {
     ellipse(p.x, p.y, nodeSize)
     textAlign(LEFT, CENTER)
     strokeWeight(4)
-    stroke(50)
+    stroke(textOutline)
     text(i, p.x + nodeSize - 3, p.y + 1)
   })
   strokeWeight(edgeWeight)
@@ -65,6 +70,9 @@ function draw() {
 
 // Determines if mouse press is near a node
 const isPromixous = (p, mx, my) => dist(p.x, p.y, mx, my) < nodeSize * 2;
+
+// Determins if mouse press is inside canvas
+const insideCanvas = (mx, my) => mx >= 0 && mx < CW && my >= 0 && my < CH;
 
 // Returns the index of the clicked node, if there is one
 function getNearest(mx, my) {
@@ -80,26 +88,28 @@ function getNearest(mx, my) {
 }
 
 function mousePressed() {
-  const target = getNearest(mouseX, mouseY) ?? null
-
-  if (target === null) {
-    user.target = null;
-    graph.addNode(mouseX, mouseY, false, false)
+  console.log('Mouse pressed')
+  if (insideCanvas(mouseX, mouseY)) {
+    const target = getNearest(mouseX, mouseY) ?? null
+    if (target === null) {
+      user.target = null;
+      graph.addNode(mouseX, mouseY, false, false)
+    }
   }
 }
 
 function doubleClicked() {
-  const target = getNearest(mouseX, mouseY) ?? null
+  console.log('Mouse double clicked')
+  if (insideCanvas(mouseX, mouseY)) {
+    const target = getNearest(mouseX, mouseY) ?? null
 
-  if (target !== null) {
-    user.target = target;
-
-    if (graph.start === null) graph.start = target
-    else if (graph.end === null) graph.end = target
-
-    console.log('start ' + graph.start, ', end ' + graph.end)
+    if (target !== null) {
+      user.target = target;
+      if (graph.start === null) graph.start = target
+      else if (graph.end === null) graph.end = target
+    }
+    user.target = null;
   }
-  user.target = null;
 }
 
 function mouseDragged() {
@@ -107,17 +117,16 @@ function mouseDragged() {
     user.dragging = true
     user.target = getNearest(mouseX, mouseY) ?? null
   } 
-  else if (keyCode === SHIFT && user.target !== null)
-    graph.moveNode(user.target, mouseX, mouseY)
+
+  handleChaining()
 }
 
 function mouseReleased() {
+  console.log("Mouse released")
   const destination = getNearest(mouseX, mouseY) ?? null;
 
-  if (destination !== null && user.target !== null) {
+  if (destination !== null && user.target !== null)
     graph.addEdge(user.target, destination)
-  }
-
   if (graph.start !== null && graph.end !== null)
     graph.findPath(graph.start, graph.end)
   
@@ -146,12 +155,32 @@ function drawPath(path) {
 }
 
 function displayPathInformation() {
-  // if (graph.path  !== null) {
-  //   infoStartNode.innerText = `Start node: ${graph.start ?? 'not set'}`
-  //   infoEndNode.innerText = `End node: ${graph.end ?? 'not set'}`
-    
-  //   infoShortestPath.innerText = graph.path ? 
-  //   `Shortest route: ${graph.start + ' -> ' + graph.path.join(' -> ')}` :
-  //   `No path found.`
-  // }
+  infoStartNode.elt.innerText = `${graph.start ?? 'not set'}`
+  infoEndNode.elt.innerText = `${graph.end ?? 'not set'}`
+  
+  if (graph.path  !== null) {
+    infoShortestPath.elt.innerText = graph.path ? 
+    `${graph.start + '->' + graph.path.join('->')}` :
+    `No path found.`
+  }
+}
+
+// THIS IS A WAR CRIME
+function handleChaining() {
+  console.log('handling chain', user)
+  if (user.dragging && user.target !== null && user.dragMode === 'edgeMode') {
+    let destinationStart = getNearest(mouseX, mouseY) ?? null
+    if (destinationStart !== null) {
+      const sx = mouseX, sy = mouseY;
+      window.setTimeout(() => {
+        let destinationEnd = getNearest(mouseX, mouseY) ?? null
+        user.hovering = (sx - mouseX < 5 && sx - mouseX > -5 && sy - mouseY < 5 && sy - mouseY > -5)
+        if (user.hovering && user.target !== null && destinationEnd !== null && destinationStart === destinationEnd) {
+          graph.addEdge(user.target, destinationEnd)
+          user.target = destinationEnd
+        }
+      }, 500)
+    }
+  }
+  user.hovering = false;
 }

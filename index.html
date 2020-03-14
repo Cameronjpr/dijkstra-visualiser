@@ -1,19 +1,33 @@
-<!-- <html>
+<html>
   <head>
-    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
+    <script src="dijkstra.js"></script>
+    <script src="graph.js"></script>
+    <script src="user.js"></script>
+    <script src="main.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
   </head>
   <body>
     <section id="infopane" class="unselectable">
-      <form id="controlpane">
-        <input type="radio" name="dragMode" for="moveMode" value="moveMode"></input>  
-        <label for="moveMode">Move Mode</label>
-        <input type="radio" name="dragMode" for="edgeMode" value="moveMode"></input>
-        <label for="edgeMode">Edge Mode</label>
-      </form>
       <h1>Dijkstra's shortest path visualiser</h1>
-      <span id="info-start-node">Start node: </span><br>
-      <span id="info-end-node">End node: </span><br>
-      <span id="info-shortest-path">Shortest path: </span><br>
+      <table>
+        <tr>
+          <th>Start node:</th>
+          <td id="info-start-node"></td>
+        </tr>
+        <tr>
+          <th>End node:</th>
+          <td id="info-end-node"></td>
+        </tr>
+        <tr>
+          <th>Shortest path:</th>
+          <td id="info-shortest-path"></td>
+        </tr>
+      </table>
       <h2>About</h2>
       <p>
         This is an interactive tool built to visualise
@@ -27,32 +41,23 @@
         <li>Double click to set start node</li>
         <li>Double click again to set end node</li>
       </ul>
+      <form>
+        <fieldset>
+          <legend>Set dragging mode</legend>
+          <input type="radio" name="dragMode" for="edgeMode" value="edgeMode" onclick="user.setDragMode('edgeMode')" checked></input>
+          <label for="edgeMode">Add edges</label>
+          <input type="radio" name="dragMode" for="moveMode" value="moveMode" onclick="user.setDragMode('moveMode')"></input>  
+          <label for="moveMode">Move nodes</label>
+        </fieldset>
+      </form>
+      <fieldset>
+        <legend>Canvas controls</legend>
+        <button onclick="graph.resetStartAndEnd()">Reset start and end</button>
+        <button onclick="graph.reset()">Reset graph</button>
+      </fieldset>
     </section>
   </body>
 </html>
 
 <!doctype html>
-<html lang="en"> -->
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="mobile-web-app-capable" content="yes">
-  <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
-  <script src="dijkstra.js"></script>
-  <script src="graph.js"></script>
-  <script src="main.js"></script>
-  <title>React.js Boilerplate</title>
-</head>
-<body>
-  <noscript>If you're seeing this message, that means
-    <strong>JavaScript has been disabled on your browser</strong>, please
-    <strong>enable JS</strong> to make this app work.</noscript>
-    <div id="app"></div>
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="main.css">
-  <link rel="icon" href="/favicon.ico" />
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
-</body>
-
-</html>
+<html lang="en">
