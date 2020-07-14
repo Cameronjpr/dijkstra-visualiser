@@ -11,12 +11,13 @@ body {
   height: 100%;
 }
 
-canvas {
+.p5Canvas {
+  order: 1;
   border: 5px solid black;
 }
 
 #infopane {
-  order: 1;
+  order: 2;
   margin: 1em;
 }
 
@@ -52,4 +53,10 @@ th, td {
 
 th {
   text-align: left;
+}
+
+@media only screen and (max-width: 1200px) {
+  body {
+    flex-direction: column;
+  }
 }
